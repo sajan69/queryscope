@@ -14,7 +14,7 @@ Full dashboard (books, search, analytics, compare) and an optimized books partia
 
 **Full tour** — run books query, search, analytics (ORM then Python), compare A/B:
 
-![Dashboard tour](docs/videos/demo-dashboard-tour.mp4)
+![Dashboard tour](https://github.com/user-attachments/assets/1ad26c46-47c8-4dc3-8034-ddbe814a3fed)
 
 ## Stack
 
