@@ -16,9 +16,6 @@ Full dashboard (books, search, analytics, compare) and an optimized books partia
 
 ![Dashboard tour](docs/videos/demo-dashboard-tour.mp4)
 
-<video src="docs/videos/demo-dashboard-tour.mp4" controls width="100%" title="QueryScope dashboard tour"><source src="docs/videos/demo-dashboard-tour.mp4" type="video/mp4"></video>
-
-
 ## Stack
 
 - Python 3.12+, Django 5.1+ (project pins compatible versions via `pyproject.toml`)
