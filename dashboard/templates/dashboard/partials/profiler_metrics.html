@@ -1,0 +1,54 @@
+<div class="metrics">
+  <div class="metric">
+    <div class="k">Queries</div>
+    <div class="v {% if profile.query_count > 10 %}warn{% else %}ok{% endif %}">{{ profile.query_count }}</div>
+  </div>
+  <div class="metric">
+    <div class="k">Total ms</div>
+    <div class="v">{{ profile.total_ms }}</div>
+  </div>
+  <div class="metric">
+    <div class="k">Duplicate patterns</div>
+    <div class="v {% if profile.duplicate_queries > 0 %}warn{% endif %}">{{ profile.duplicate_queries }}</div>
+  </div>
+  <div class="metric">
+    <div class="k">Cache hit</div>
+    <div class="v {% if profile.cache_hit %}ok{% endif %}">{{ profile.cache_hit|yesno:"yes,no" }}</div>
+  </div>
+  <div class="metric">
+    <div class="k">Slowest ms</div>
+    <div class="v">{{ profile.slowest_query_ms }}</div>
+  </div>
+</div>
+
+{% if profile.slowest_sql %}
+<h3 style="margin-top:1rem;font-size:0.85rem;color:var(--muted);">Slowest SQL</h3>
+<pre class="sql">{{ profile.slowest_sql }}</pre>
+{% endif %}
+
+{% if profile.explain %}
+<h3 style="margin-top:1rem;font-size:0.85rem;color:var(--muted);">EXPLAIN ANALYZE (slowest)</h3>
+<pre class="sql explain">{{ profile.explain }}</pre>
+{% endif %}
+
+<h3 style="margin-top:1rem;font-size:0.85rem;color:var(--muted);">SQL log</h3>
+<div class="panel" style="background:#0d1117;padding:0.5rem;">
+  {% for row in profile.queries %}
+    {% if row.time_ms >= 5 %}
+      {% if row.time_ms >= 20 %}
+        <div class="sql-line slow"><span style="color:var(--danger);">{{ row.time_ms }} ms</span> — {{ row.sql }}</div>
+      {% else %}
+        <div class="sql-line medium"><span style="color:var(--warn);">{{ row.time_ms }} ms</span> — {{ row.sql }}</div>
+      {% endif %}
+    {% else %}
+      <div class="sql-line fast"><span style="color:var(--accent);">{{ row.time_ms }} ms</span> — {{ row.sql }}</div>
+    {% endif %}
+  {% empty %}
+    <p style="color:var(--muted);margin:0;">No queries recorded (DEBUG and database logging required).</p>
+  {% endfor %}
+</div>
+
+<details style="margin-top:0.75rem;">
+  <summary style="cursor:pointer;color:var(--muted);">Raw JSON payload</summary>
+  <pre class="sql" style="margin-top:0.5rem;">{{ data_json }}</pre>
+</details>

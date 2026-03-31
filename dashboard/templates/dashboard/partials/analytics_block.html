@@ -1,0 +1,22 @@
+<div class="panel">
+  <h2>{{ section_title }}</h2>
+  <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0;">
+    Mode: <strong>{{ mode }}</strong>
+    {% if mode == "orm" and summary %}
+      — aggregates in PostgreSQL; per-row <code>annotate</code> + window <code>Rank</code> on price.
+    {% elif mode == "python" %}
+      — stats computed in Python from prefetched reviews (illustrates extra memory/work vs DB aggregation).
+    {% endif %}
+  </p>
+
+  {% if summary %}
+  <div class="metrics" style="margin-bottom: 1rem;">
+    <div class="metric"><div class="k">Total books</div><div class="v">{{ summary.total_books }}</div></div>
+    <div class="metric"><div class="k">Avg price</div><div class="v">{{ summary.avg_price|floatformat:2 }}</div></div>
+    <div class="metric"><div class="k">Total reviews</div><div class="v">{{ summary.total_reviews }}</div></div>
+    <div class="metric"><div class="k">Avg rating (all)</div><div class="v">{{ summary.avg_rating_all|floatformat:2 }}</div></div>
+  </div>
+  {% endif %}
+
+  {% include "dashboard/partials/profiler_metrics.html" %}
+</div>

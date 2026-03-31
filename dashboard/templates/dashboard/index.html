@@ -1,0 +1,118 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Dashboard — QueryScope{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <h2>Books list (HTMX)</h2>
+  <p style="color: var(--muted); font-size: 0.9rem;">Toggle ORM options and submit to refresh metrics without a full page reload.</p>
+  <form
+    id="books-form"
+    hx-get="{% url 'dashboard:partials_books' %}"
+    hx-target="#books-result"
+    hx-indicator="#books-loading"
+  >
+    {% csrf_token %}
+    <label><input type="checkbox" name="select_related" value="true"> select_related</label>
+    <label><input type="checkbox" name="prefetch_related" value="true"> prefetch_related</label>
+    <label><input type="checkbox" name="annotate" value="true"> annotate</label>
+    <label><input type="checkbox" name="cache" value="true"> cache (60s)</label>
+    <div style="margin-top:0.5rem;">
+      <label>limit <input type="number" name="limit" value="50" min="1" max="500" style="width:5rem;"></label>
+    </div>
+    <div style="margin-top:0.75rem;">
+      <button type="submit">Run query</button>
+      <span id="books-loading" class="htmx-indicator" style="margin-left:0.5rem;color:var(--muted);">Loading…</span>
+    </div>
+  </form>
+  <div id="books-result" style="margin-top:1rem;"></div>
+</section>
+
+<section class="panel">
+  <h2>Search modes</h2>
+  <form
+    id="search-form"
+    hx-get="{% url 'dashboard:partials_search' %}"
+    hx-target="#search-result"
+    hx-indicator="#search-loading"
+  >
+    {% csrf_token %}
+    <label>q <input type="text" name="q" placeholder="Search term" style="min-width:16rem;"></label>
+    <label>mode
+      <select name="mode">
+        <option value="naive">naive (ILIKE)</option>
+        <option value="btree">btree (startswith)</option>
+        <option value="fulltext">fulltext (GIN)</option>
+      </select>
+    </label>
+    <div style="margin-top:0.75rem;">
+      <button type="submit" class="secondary">Run search</button>
+      <span id="search-loading" class="htmx-indicator" style="margin-left:0.5rem;color:var(--muted);">Loading…</span>
+    </div>
+  </form>
+  <div id="search-result" style="margin-top:1rem;"></div>
+</section>
+
+<section class="panel">
+  <h2>Analytics (Python vs ORM)</h2>
+  <p style="color: var(--muted); font-size: 0.9rem;">Compare aggregations in Python vs in the database (annotate + window functions).</p>
+  <form
+    id="analytics-form"
+    hx-get="{% url 'dashboard:partials_analytics' %}"
+    hx-target="#analytics-result"
+    hx-indicator="#analytics-loading"
+  >
+    {% csrf_token %}
+    <label>mode
+      <select name="mode">
+        <option value="orm" selected>orm (annotate + aggregate)</option>
+        <option value="python">python (loop in memory)</option>
+      </select>
+    </label>
+    <div style="margin-top:0.75rem;">
+      <button type="submit" class="secondary">Run analytics</button>
+      <span id="analytics-loading" class="htmx-indicator" style="margin-left:0.5rem;color:var(--muted);">Loading…</span>
+    </div>
+  </form>
+  <div id="analytics-result" style="margin-top:1rem;"></div>
+</section>
+
+<section class="panel">
+  <h2>Compare A / B</h2>
+  <form
+    id="compare-form"
+    hx-post="{% url 'dashboard:partials_compare' %}"
+    hx-target="#compare-result"
+    hx-indicator="#compare-loading"
+  >
+    {% csrf_token %}
+    <label>limit <input type="number" name="limit" value="50" min="1" max="500" style="width:5rem;"></label>
+    <div class="grid-2" style="margin-top:0.75rem;">
+      <div>
+        <strong>Config A</strong><br>
+        <label><input type="checkbox" name="config_a_select_related"> select_related</label><br>
+        <label><input type="checkbox" name="config_a_prefetch_related"> prefetch_related</label><br>
+        <label><input type="checkbox" name="config_a_annotate"> annotate</label><br>
+        <label><input type="checkbox" name="config_a_cache"> cache</label>
+      </div>
+      <div>
+        <strong>Config B</strong><br>
+        <label><input type="checkbox" name="config_b_select_related" checked> select_related</label><br>
+        <label><input type="checkbox" name="config_b_prefetch_related" checked> prefetch_related</label><br>
+        <label><input type="checkbox" name="config_b_annotate" checked> annotate</label><br>
+        <label><input type="checkbox" name="config_b_cache"> cache</label>
+      </div>
+    </div>
+    <div style="margin-top:0.75rem;">
+      <button type="submit" class="secondary">Compare</button>
+      <span id="compare-loading" class="htmx-indicator" style="margin-left:0.5rem;color:var(--muted);">Loading…</span>
+    </div>
+  </form>
+  <div id="compare-result" style="margin-top:1rem;"></div>
+</section>
+
+<p style="color: var(--muted); font-size: 0.85rem;">
+  REST API: <code>/api/books/</code>, <code>/api/books/search/</code>, <code>/api/books/analytics/</code>,
+  <code>/api/books/bulk/</code>, <code>/api/profile/compare/</code>
+</p>
+{% endblock %}

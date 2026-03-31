@@ -1,0 +1,45 @@
+{% if error %}
+<p style="color: var(--danger);">{{ error }}</p>
+{% else %}
+<div class="panel">
+  <h2>Compare results</h2>
+  <div class="grid-2">
+    <div>
+      <h3 style="margin-top:0;font-size:0.9rem;color:var(--muted);">Config A</h3>
+      <div class="metrics">
+        <div class="metric"><div class="k">Queries</div><div class="v">{{ config_a.query_count }}</div></div>
+        <div class="metric"><div class="k">ms</div><div class="v">{{ config_a.total_ms }}</div></div>
+        <div class="metric"><div class="k">Duplicates</div><div class="v">{{ config_a.duplicate_queries }}</div></div>
+      </div>
+      {% if config_a.explain %}
+      <pre class="sql explain" style="margin-top:0.5rem;font-size:0.68rem;">{{ config_a.explain }}</pre>
+      {% endif %}
+    </div>
+    <div>
+      <h3 style="margin-top:0;font-size:0.9rem;color:var(--muted);">Config B</h3>
+      <div class="metrics">
+        <div class="metric"><div class="k">Queries</div><div class="v">{{ config_b.query_count }}</div></div>
+        <div class="metric"><div class="k">ms</div><div class="v">{{ config_b.total_ms }}</div></div>
+        <div class="metric"><div class="k">Duplicates</div><div class="v">{{ config_b.duplicate_queries }}</div></div>
+      </div>
+      {% if config_b.explain %}
+      <pre class="sql explain" style="margin-top:0.5rem;font-size:0.68rem;">{{ config_b.explain }}</pre>
+      {% endif %}
+    </div>
+  </div>
+  <div class="metrics" style="margin-top:1rem;">
+    <div class="metric">
+      <div class="k">Query count Δ (A − B)</div>
+      <div class="v ok">{{ diff.query_count_reduction }}</div>
+    </div>
+    <div class="metric">
+      <div class="k">Time Δ ms (A − B)</div>
+      <div class="v ok">{{ diff.time_reduction_ms }}</div>
+    </div>
+    <div class="metric">
+      <div class="k">Time Δ %</div>
+      <div class="v ok">{{ diff.time_reduction_pct }}%</div>
+    </div>
+  </div>
+</div>
+{% endif %}

@@ -2,6 +2,21 @@
 
 Django ORM profiling dashboard and bookstore catalog API. Use toggles to compare query counts, timings, SQL logs, and `EXPLAIN ANALYZE` output for the same endpoint with different ORM options.
 
+## Screenshots
+
+Full dashboard (books, search, analytics, compare) and an optimized books partial (HTMX fragment with query metrics):
+
+![Dashboard overview](docs/screenshots/dashboard-overview.png)
+
+![Books partial — select_related + prefetch_related](docs/screenshots/books-partial-optimized.png)
+
+## Demo videos
+
+**Full tour** — run books query, search, analytics (ORM then Python), compare A/B:
+
+<video src="docs/videos/demo-dashboard-tour.mp4" controls width="100%" title="QueryScope dashboard tour"></video>
+
+
 ## Stack
 
 - Python 3.12+, Django 5.1+ (project pins compatible versions via `pyproject.toml`)

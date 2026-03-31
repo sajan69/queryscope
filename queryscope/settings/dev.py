@@ -6,7 +6,7 @@ from .base import *  # noqa: F403
 
 DEBUG = config("DEBUG", default=True, cast=bool)  # noqa: F405
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 
 # LocMem cache by default; swap to Redis when REDIS is available (later milestone)
 if config("USE_REDIS_CACHE", default=False, cast=bool):
